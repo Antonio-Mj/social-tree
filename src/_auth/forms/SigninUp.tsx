@@ -5,25 +5,33 @@ import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form'
 import { SIGNUPVALIDATION } from '@/lib/validation'
 import { z } from 'zod'
+import Loader from '@/components/shared/Loader'
+import { Link } from 'react-router-dom'
+import { createUserAccount } from '@/lib/appwrite/api'
 
 
 
 const SigninUp = () => {
+
+  const isLoading = false
   // 1. Define your form.
   const form = useForm<z.infer<typeof SIGNUPVALIDATION>>({
     resolver: zodResolver(SIGNUPVALIDATION),
     defaultValues: {
-      name: 'rafita',
-      email: "example@example.com",
+      name: '',
+      email: "",
       password: "",
       username: "",
     },
   })
  
   // 2. Define a submit handler.
-  const onSubmit = (values: z.infer<typeof SIGNUPVALIDATION>) => {
-    console.log(values);
+  //agregar ASYNC
+  async function onSubmit(values: z.infer<typeof SIGNUPVALIDATION>){
     // Aquí puedes realizar acciones con los datos del formulario, como enviarlos a un servidor.
+    const newUser = await createUserAccount(values);
+    console.log(newUser);
+    
   }
 
   return (
@@ -32,24 +40,76 @@ const SigninUp = () => {
           <h2 className='h3-bold md:h2-bold pt-5 sm:pt-12'>Crear una cuenta nueva </h2>
           <p className='text-gray-300 small-medium md:base-regular mt-2'>¡Para usar social tree necesitas una cuenta!</p>
      
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nombre</FormLabel>
+                <FormControl>
+                  <Input className='shad-input' {...field} />
+                </FormControl>    
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+            <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type='email' className='shad-input'  {...field} />
+                </FormControl>    
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Nombre de usuario</FormLabel>
                 <FormControl>
-                  <Input className='text-black' placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
+                  <Input  className='shad-input'  {...field} />
+                </FormControl>    
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contraseña</FormLabel>
+                <FormControl>
+                  <Input type='password' className='shad-input'  {...field} />
+                </FormControl>    
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className='shad-button_primary'>
+            {
+              isLoading
+               ?  
+               <div className="flex gap-2">
+                <Loader />
+                Creando cuenta...
+               </div>
+                : "Crear cuenta"
+            }
+          </Button>
+          <p className='text-small-regular text-light-2 text-center mt-2'>
+            ¿Ya tienes cuenta?
+            <Link to='/signin' className='text-blue-500 hover:text-blue-600 ml-2 text-small-semibold'>
+              Iniciar sesión
+            </Link>
+            </p>
         </form>
         </div>
       </Form> 

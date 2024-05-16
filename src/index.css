@@ -5,7 +5,7 @@ body{
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #020525;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -65,3 +65,8 @@ button:focus-visible {
   }
 }
 
+.alert-info{
+  font-size: .8rem;
+  color: rgb(255, 112, 112);
+  opacity: .7;
+}
