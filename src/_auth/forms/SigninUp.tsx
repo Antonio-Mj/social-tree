@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form'
 import { SIGNUPVALIDATION } from '@/lib/validation'
@@ -8,11 +8,12 @@ import { z } from 'zod'
 import Loader from '@/components/shared/Loader'
 import { Link } from 'react-router-dom'
 import { createUserAccount } from '@/lib/appwrite/api'
+import { useToast } from "@/components/ui/use-toast"
 
 
 
 const SigninUp = () => {
-
+  const { toast } = useToast()
   const isLoading = false
   // 1. Define your form.
   const form = useForm<z.infer<typeof SIGNUPVALIDATION>>({
@@ -31,6 +32,12 @@ const SigninUp = () => {
     // Aquí puedes realizar acciones con los datos del formulario, como enviarlos a un servidor.
     const newUser = await createUserAccount(values);
     console.log(newUser);
+
+    if(!newUser){
+      return toast({title: "Error al crear la cuenta, por favor prueba de nuevo" })
+    }
+
+    // const session = await signInAccount();
     
   }
 

@@ -5,6 +5,7 @@ import SigninUp from './_auth/forms/SigninUp'
 import { Home } from './_root/pages'
 import Auth_layout from './_auth/Auth_layout'
 import RootLayout from './_root/RootLayout'
+import { Toaster } from "@/components/ui/toaster"
 
 
 function App() {
@@ -23,6 +24,9 @@ function App() {
           <Route index element={<Home />}></Route>  
         </Route>
       </Routes>
+
+      <Toaster />
+
     </main>
   )
 }
