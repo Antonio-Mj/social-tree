@@ -6,15 +6,24 @@ import { useForm } from 'react-hook-form'
 import { SIGNUPVALIDATION } from '@/lib/validation'
 import { z } from 'zod'
 import Loader from '@/components/shared/Loader'
-import { Link } from 'react-router-dom'
-import { createUserAccount } from '@/lib/appwrite/api'
+import { Link, useNavigate } from 'react-router-dom'
 import { useToast } from "@/components/ui/use-toast"
+import { useCreateuserAccount, useSignInAccount } from '@/lib/react-query/queryAndMutation'
+import { useUserContext } from '@/context/AuthContext'
 
 
 
 const SigninUp = () => {
   const { toast } = useToast()
-  const isLoading = false
+  const { checkAuthUser, isLoading:isUserLoading } = useUserContext();
+  const navigate = useNavigate();
+
+  
+  const { mutateAsync: createUserAccount, isPending:
+    isCreatingAccount } = useCreateuserAccount();
+
+
+    const { mutateAsync: signInAccount, isPending: isSigningIn } =  useSignInAccount();
   // 1. Define your form.
   const form = useForm<z.infer<typeof SIGNUPVALIDATION>>({
     resolver: zodResolver(SIGNUPVALIDATION),
@@ -37,8 +46,22 @@ const SigninUp = () => {
       return toast({title: "Error al crear la cuenta, por favor prueba de nuevo" })
     }
 
-    // const session = await signInAccount();
-    
+    const session = await signInAccount({
+      email:values.email,
+      password:  values.password,
+    })
+    if (!session){
+      return toast({title: "Error al iniciar sesion, por favor prueba de nuevo" })
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if(isLoggedIn){
+      form.reset();
+      navigate('/')
+    }else{
+      return toast({title: "Error al iniciar sesion, por favor intenta de nuevo"})
+    }
   }
 
   return (
@@ -102,7 +125,7 @@ const SigninUp = () => {
           />
           <Button type="submit" className='shad-button_primary'>
             {
-              isLoading
+              isCreatingAccount
                ?  
                <div className="flex gap-2">
                 <Loader />
