@@ -28,7 +28,7 @@ const SigninUp = () => {
   const form = useForm<z.infer<typeof SIGNUPVALIDATION>>({
     resolver: zodResolver(SIGNUPVALIDATION),
     defaultValues: {
-      name: '',
+      name: "",
       email: "",
       password: "",
       username: "",
@@ -40,9 +40,9 @@ const SigninUp = () => {
   async function onSubmit(values: z.infer<typeof SIGNUPVALIDATION>){
     // Aquí puedes realizar acciones con los datos del formulario, como enviarlos a un servidor.
     const newUser = await createUserAccount(values);
-    console.log(newUser);
+    // console.log(newUser);
 
-    if(!newUser){
+    if(newUser){
       return toast({title: "Error al crear la cuenta, por favor prueba de nuevo" })
     }
 
@@ -50,13 +50,13 @@ const SigninUp = () => {
       email:values.email,
       password:  values.password,
     })
-    if (!session){
+    if (session){
       return toast({title: "Error al iniciar sesion, por favor prueba de nuevo" })
     }
 
     const isLoggedIn = await checkAuthUser();
 
-    if(isLoggedIn){
+    if(!isLoggedIn){
       form.reset();
       navigate('/')
     }else{
