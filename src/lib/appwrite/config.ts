@@ -2,13 +2,13 @@ import { Client, Account, Databases, Storage, Avatars } from 'appwrite';
 
 // Configuración del cliente Appwrite
 export const appwriteConfig = {
+    url: import.meta.env.VITE_APPWRITE_PROJECT_URL,
     projectId: import.meta.env.VITE_APPWRITE_PROJECT_ID,
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
     storageId: import.meta.env.VITE_APPWRITE_PROYECT_STORAGE,
     userCollectionId: import.meta.env.VITE_APPWRITE_USER_COLLECTION_ID,
     postCollectionId: import.meta.env.VITE_APPWRITE_POST_COLLECTION_ID,
-    savesCollectionId: import.meta.env.VITE_APPWRITE_SAVES_COLLECTION_ID,
-    url: import.meta.env.VITE_APPWRITE_PROJECT_URL
+    savesCollectionId: import.meta.env.VITE_APPWRITE_SAVES_COLLECTION_ID
 }
 
 // Verifica que las variables de entorno estén definidas

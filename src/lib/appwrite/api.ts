@@ -31,34 +31,34 @@ export async function createUserAccount(user: INewUser){
 
 }
 
-export async function  saveUserToDB(user:{
-    accountId:String;
-    email:String;
-    name:String;
+export async function saveUserToDB(user: {
+    accountId: string;
+    email: string;
+    name: string;
     imageUrl: URL;
     username?: string;
-}) {
+  }) {
     try {
-        const newUser = await databases.createDocument(
-            appwriteConfig.databaseId,
-            appwriteConfig.userCollectionId,
-            ID.unique(),
-            user,
-        );
-        return newUser
+      const newUser = await databases.createDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        ID.unique(),
+        user,
+      );
+  
+      return newUser;
     } catch (error) {
-        console.log(error);
-        
-    }
-}
+      console.log(error);
+    } 
+  }
 
 export async function signInAccount(user: { email: string; password: string }) {
     try {
-        const session = await account.createSession(user.email, user.password);
+        const session = await account.createEmailPasswordSession(user.email, user.password);
         
         return session;
     } catch (error) {
-        console.log('Error creating email session:', error);
+        console.log('Error al crear la  email session:', error);
        // throw error;  // Lanza el error para que pueda ser manejado por el llamador.
     }
 }

@@ -50,7 +50,7 @@ const SigninUp = () => {
       email:values.email,
       password:  values.password,
     })
-    if (session){
+    if (!session){
       return toast({title: "Error al iniciar sesion, por favor prueba de nuevo" })
     }
 
